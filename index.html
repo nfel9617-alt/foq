@@ -190,9 +190,9 @@
             border: 2px solid #FFFFFF;
         }
 
-        /* ==================== HERO SECTION ==================== */
+        /* ==================== HERO SECTION & CANVAS FIX ==================== */
         .hero {
-            padding: 40px 0 20px;
+            padding: 30px 0 20px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
@@ -200,7 +200,7 @@
         }
 
         .hero-text h1 {
-            font-size: 2.5rem;
+            font-size: 2.3rem;
             color: var(--primary);
             margin-bottom: 16px;
             line-height: 1.25;
@@ -237,9 +237,10 @@
             display: inline-block;
         }
 
+        /* إصلاح الكانفاس للموبايل */
         .hero-canvas-wrapper {
             width: 100%;
-            height: 350px;
+            min-height: 280px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -247,24 +248,29 @@
         }
 
         #fishCanvas {
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            aspect-ratio: 5 / 3.5;
             object-fit: contain;
             animation: floatFish 4s ease-in-out infinite;
         }
 
         @keyframes floatFish {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-10px); }
         }
 
         #hiddenVideo {
             display: none;
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* ==================== SECTIONS & TITLES ==================== */
         .section-header {
-            margin: 50px 0 25px;
+            margin: 40px 0 25px;
             text-align: center;
         }
 
@@ -289,7 +295,7 @@
         /* ==================== PRODUCT CARDS ==================== */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 20px;
         }
 
@@ -407,7 +413,7 @@
             border-color: var(--primary);
         }
 
-        /* ==================== CART SLIDE DRAWER (MOBILE READY) ==================== */
+        /* ==================== CART SLIDE DRAWER ==================== */
         .drawer-overlay {
             position: fixed;
             top: 0;
@@ -669,7 +675,7 @@
             }
 
             .nav-links {
-                display: none; /* إخفاء الروابط في الهاتف للتمركز على الإجراءات السريعة */
+                display: none;
             }
 
             .hero-text h1 {
@@ -681,7 +687,7 @@
             }
 
             .hero-canvas-wrapper {
-                height: 260px;
+                min-height: 230px;
             }
 
             .drawer {
@@ -689,7 +695,7 @@
             }
 
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 12px;
             }
 
@@ -702,7 +708,7 @@
             }
 
             .card-title {
-                font-size: 0.95rem;
+                font-size: 0.92rem;
             }
 
             .current-price {
@@ -772,9 +778,10 @@
                 </ul>
             </div>
 
+            <!-- الكانفاس المصلح خصيصاً للهواتف الذكية -->
             <div class="hero-canvas-wrapper">
                 <canvas id="fishCanvas" width="500" height="350"></canvas>
-                <video id="hiddenVideo" autoplay loop muted playsinline crossOrigin="anonymous">
+                <video id="hiddenVideo" autoplay loop muted playsinline webkit-playsinline crossOrigin="anonymous">
                     <source src="betta-video.mp4" type="video/mp4">
                     <source src="https://nfel9617-alt.github.io/foq/betta-video.mp4" type="video/mp4">
                 </video>
@@ -876,7 +883,7 @@
 
     </main>
 
-    <!-- MOBILE-READY CART DRAWER (سلة المشتريات المستقلة) -->
+    <!-- MOBILE-READY CART DRAWER -->
     <div class="drawer-overlay" id="drawerOverlay">
         <div class="drawer">
             <div class="drawer-header">
@@ -933,7 +940,7 @@
         </div>
     </div>
 
-    <!-- EXPERT BETTA ENCYCLOPEDIA MODAL (دليل خبير الفايتر) -->
+    <!-- EXPERT BETTA ENCYCLOPEDIA MODAL -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-body">
             <button class="close-icon" style="position: absolute; left: 20px; top: 15px;" onclick="closeModal()">&times;</button>
@@ -999,7 +1006,7 @@
         </div>
     </div>
 
-    <!-- Toast Popup Notification -->
+    <!-- Toast Notification -->
     <div class="toast" id="toast">تمت إضافة المنتج إلى السلة بنجاح!</div>
 
     <!-- Footer -->
@@ -1023,37 +1030,74 @@
         </div>
     </footer>
 
-    <!-- JavaScript Engine -->
+    <!-- JavaScript Engine المصلح للموبايل -->
     <script>
-        /* ==================== REAL-TIME CANVAS CHROMA KEY ==================== */
+        /* ==================== REAL-TIME CANVAS CHROMA KEY (FIXED FOR MOBILE) ==================== */
         const video = document.getElementById('hiddenVideo');
         const canvas = document.getElementById('fishCanvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-        video.addEventListener('play', () => {
-            function renderFrame() {
-                if (video.paused || video.ended) return;
+        // إجبار الصمت والتكيف المباشر للموبايل
+        video.muted = true;
+        video.playsInline = true;
 
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                let frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                let len = frame.data.length / 4;
+        let isRendering = false;
 
-                for (let i = 0; i < len; i++) {
-                    let r = frame.data[i * 4 + 0];
-                    let g = frame.data[i * 4 + 1];
-                    let b = frame.data[i * 4 + 2];
+        function startFishAnimation() {
+            if (isRendering) return;
+            isRendering = true;
 
-                    // معالجة البيكسلات السوداء لجعلها شفافة 100%
-                    if (r < 32 && g < 32 && b < 32) {
-                        frame.data[i * 4 + 3] = 0;
+            function processFrame() {
+                if (!video.paused && !video.ended) {
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    try {
+                        let frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        let len = frame.data.length / 4;
+
+                        for (let i = 0; i < len; i++) {
+                            let r = frame.data[i * 4 + 0];
+                            let g = frame.data[i * 4 + 1];
+                            let b = frame.data[i * 4 + 2];
+
+                            // إخفاء البيكسلات السوداء بالكامل
+                            if (r < 35 && g < 35 && b < 35) {
+                                frame.data[i * 4 + 3] = 0;
+                            }
+                        }
+                        ctx.putImageData(frame, 0, 0);
+                    } catch(e) {
+                        // حماية الكانفاس في حالة التأخير
                     }
                 }
-
-                ctx.putImageData(frame, 0, 0);
-                requestAnimationFrame(renderFrame);
+                requestAnimationFrame(processFrame);
             }
-            renderFrame();
-        });
+            processFrame();
+        }
+
+        // إطلاق تشغيل الفيديو على الموبايل
+        function initMobileVideo() {
+            let playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    startFishAnimation();
+                }).catch(() => {
+                    // في حال تفعيل الموبايل لوضع توفير الطاقة، يتم البدء مع أول لمسة أو سحب للشاشة
+                    const triggerPlay = () => {
+                        video.play();
+                        startFishAnimation();
+                        document.removeEventListener('touchstart', triggerPlay);
+                        document.removeEventListener('scroll', triggerPlay);
+                        document.removeEventListener('click', triggerPlay);
+                    };
+                    document.addEventListener('touchstart', triggerPlay);
+                    document.addEventListener('scroll', triggerPlay);
+                    document.addEventListener('click', triggerPlay);
+                });
+            }
+        }
+
+        window.addEventListener('load', initMobileVideo);
+        video.addEventListener('play', startFishAnimation);
 
         /* ==================== CART LOGIC ==================== */
         let cart = [];
