@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فقاعات لينا | Lyna Bubbles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- المتغيرات والألوان --- */
+        :root {
+            --primary-blue: #005A9C;
+            --accent-crimson: #D91A5A; /* وردي قرمزي */
+            --bg-white: #FFFFFF;
+            --bg-light: #F8F9FA;
+            --text-dark: #212529;
+            --text-gray: #6C757D;
+            --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        /* --- الإعدادات العامة --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- شريط التنقل (Header) --- */
+        header {
+            background-color: var(--bg-white);
+            box-shadow: var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover { color: var(--accent-crimson); }
+
+        .cart-btn {
+            background-color: var(--primary-blue);
+            color: var(--bg-white);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .cart-btn:hover { background-color: var(--accent-crimson); }
+
+        /* --- القسم الرئيسي (Hero Section) --- */
+        .hero {
+            background-color: var(--bg-white);
+            padding: 4rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            border-radius: 15px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .hero-content { flex: 1; }
+        .hero-content h1 {
+            color: var(--primary-blue);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+        }
+        .hero-content .highlight { color: var(--accent-crimson); font-weight: bold; }
+
+        .hero-video {
+            flex: 1;
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: #000; /* خلفية سوداء مؤقتة للفيديو */
+            position: relative;
+            height: 300px;
+        }
+
+        .hero-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* لإزالة الخلفية السوداء من فيديو السمكة إن أمكن، استخدم مزج الألوان */
+            /* mix-blend-mode: screen; */ 
+        }
+
+        /* --- أقسام المنتجات --- */
+        .section-container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            text-align: center;
+            color: var(--primary-blue);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-crimson);
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        /* --- بطاقة المنتج --- */
+        .card {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+        }
+
+        .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+
+        .card-img {
+            width: 100%;
+            height: 200px;
+            background-color: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            object-fit: cover;
+        }
+
+        .card-title { font-size: 1.2rem; color: var(--text-dark); margin-bottom: 0.5rem; }
+
+        .price-container { margin-bottom: 1rem; }
+        .price-old { text-decoration: line-through; color: var(--text-gray); font-size: 0.9rem; margin-left: 10px; }
+        .price-new { color: var(--accent-crimson); font-weight: bold; font-size: 1.3rem; }
+
+        .btn-add {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--bg-white);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-add:hover {
+            background-color: var(--primary-blue);
+            color: var(--bg-white);
+        }
+
+        /* --- النوافذ المنبثقة (Modals) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background-color: var(--bg-white);
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        .form-control {
+            width: 100%; padding: 0.8rem;
+            border: 1px solid #ddd; border-radius: 8px;
+        }
+
+        /* --- سلة المشتريات --- */
+        .cart-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 0; border-bottom: 1px solid #eee;
+        }
+        .btn-remove { color: var(--accent-crimson); background: none; border: none; cursor: pointer; text-decoration: underline; }
+
+        /* --- التذييل (Footer) --- */
+        footer {
+            background-color: var(--primary-blue);
+            color: var(--bg-white);
+            padding: 4rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-grid {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;
+        }
+
+        .footer-col h3 { margin-bottom: 1.5rem; color: var(--accent-crimson); }
+        .footer-col p, .footer-col li { margin-bottom: 0.8rem; font-size: 0.95rem; color: #ddd; }
+        .footer-col a { color: #ddd; }
+        .footer-col a:hover { color: var(--accent-crimson); }
+    </style>
+</head>
+<body>
+
+    <!-- شريط التنقل -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                فقاعات لينا
+            </div>
+            <nav class="nav-links">
+                <a href="#discounts">التخفيضات</a>
+                <a href="#fish">الأسماك</a>
+                <a href="#boxes">البوكسات</a>
+                <a href="#accessories">الإكسسوارات</a>
+            </nav>
+            <button class="cart-btn" onclick="openCart()">المشتريات (<span id="cart-count">0</span>)</button>
+        </div>
+    </header>
+
+    <!-- القسم التعريفي -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>مرحباً بكم في فقاعات لينا</h1>
+            <p>متخصصون في أسماك <span class="highlight">فايتر خاصتنا من تايلاندا</span>.</p>
+            <p>نوفر لكم تشكيلة واسعة ومميزة من الأسماك ومستلزماتها.</p>
+            <p>التوصيل متوفر إلى <span class="highlight">68 ولاية</span> في مدة يوم واحد من تأكيد الطلبية.</p>
+        </div>
+        <div class="hero-video">
+            <!-- مسار الفيديو هنا. لإزالة الخلفية السوداء برمجياً يمكنك استخدام فلتر CSS أو صيغة فيديو شفافة WebM -->
+            <video autoplay loop muted playsinline>
+                <source src="رابط_فيديو_السمكة_هنا.mp4" type="video/mp4">
+                متصفحك لا يدعم تشغيل الفيديو.
+            </video>
+        </div>
+    </section>
+
+    <!-- التخفيضات -->
+    <section id="discounts" class="section-container">
+        <h2 class="section-title">التخفيضات</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="card-img" style="background-image: url('صورة_بوكس.jpg');"></div>
+                <h3 class="card-title">بوكس التميز</h3>
+                <div class="price-container">
+                    <span class="price-old">4500 دج</span>
+                    <span class="price-new">3800 دج</span>
+                </div>
+                <button class="btn-add" onclick="addToCart('بوكس التميز (تخفيض)', 3800)">إضافة لسلة المشتريات</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- الأسماك -->
+    <section id="fish" class="section-container">
+        <h2 class="section-title">أسماك فايتر</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="card-img" style="background-image: url('صورة_سمكة.jpg');"></div>
+                <h3 class="card-title">سمكة فايتر هاف مون</h3>
+                <div class="price-container">
+                    <span class="price-new">2500 دج</span>
+                </div>
+                <!-- زر السمكة يفتح نافذة الرمز أولاً -->
+                <button class="btn-add" onclick="openFishModal('سمكة فايتر هاف مون', 2500)">طلب</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- البوكسات المتكاملة -->
+    <section id="boxes" class="section-container">
+        <h2 class="section-title">البوكسات المتكاملة</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="card-img" style="background-image: url('صورة_بوكس_كامل.jpg');"></div>
+                <h3 class="card-title">بوكس الهدية الشامل</h3>
+                <div class="price-container">
+                    <span class="price-new">5500 دج</span>
+                </div>
+                <button class="btn-add" onclick="addToCart('بوكس الهدية الشامل', 5500)">إضافة للمشتريات</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- الإكسسوارات -->
+    <section id="accessories" class="section-container">
+        <h2 class="section-title">الإكسسوارات</h2>
+        <div class="grid">
+            <div class="card">
+                <h3 class="card-title">رمل ملون</h3>
+                <div class="price-container"><span class="price-new">500 دج</span></div>
+                <button class="btn-add" onclick="addToCart('رمل ملون', 500)">إضافة لسلة المشتريات</button>
+            </div>
+            <div class="card">
+                <h3 class="card-title">فازة زجاجية دائرية</h3>
+                <div class="price-container"><span class="price-new">1200 دج</span></div>
+                <button class="btn-add" onclick="addToCart('فازة زجاجية دائرية', 1200)">إضافة لسلة المشتريات</button>
+            </div>
+            <div class="card">
+                <h3 class="card-title">مجسم سبونجبوب</h3>
+                <div class="price-container"><span class="price-new">800 دج</span></div>
+                <button class="btn-add" onclick="addToCart('مجسم سبونجبوب', 800)">إضافة لسلة المشتريات</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- التذييل والمعلومات -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>عن فقاعات لينا</h3>
+                <p>متجر إلكتروني متخصص في استيراد أسماك فايتر من تايلاندا وتوفير كافة مستلزماتها لتضفي لمسة جمالية على مساحتك.</p>
+            </div>
+            <div class="footer-col">
+                <h3>معلومات عن فايتر</h3>
+                <ul>
+                    <li>تحتاج إلى ماء بدرجة حرارة معتدلة ونظافة دورية.</li>
+                    <li>تعيش في المتوسط بين 2 إلى 5 سنوات مع العناية الجيدة.</li>
+                    <li>لا يمكن وضع ذكرين في نفس الحوض.</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>التوصيل</h3>
+                <p>مدة التوصيل: يوم واحد من تأكيد الطلبية.</p>
+                <p>الأسعار تختلف حسب الولاية وفقاً لجدول أسعار التوصيل المعتمد.</p>
+            </div>
+            <div class="footer-col">
+                <h3>تواصل معنا</h3>
+                <p>الإنستغرام: <a href="https://instagram.com/lyna_fouqaat" target="_blank">@lyna_fouqaat</a></p>
+                <p>الهاتف: +213 00 00 00 00</p>
+                <p>البريد: info@lynabubbles.com</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- نافذة تأكيد رمز السمكة -->
+    <div id="fishModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('fishModal')">&times;</span>
+            <h3 style="margin-bottom: 1rem; color: var(--primary-blue);">تأكيد طلب السمكة</h3>
+            <p style="margin-bottom: 1rem; color: var(--accent-crimson); font-weight: bold;">يرجى الدخول لصفحة الإنستغرام الخاصة بنا للحصول على رمز السمكة لتأكيد طلبك.</p>
+            <div class="form-group">
+                <label>أدخل رمز السمكة:</label>
+                <input type="text" id="fishCodeInput" class="form-control" placeholder="مثال: F-123">
+            </div>
+            <button class="btn-add" style="background-color: var(--primary-blue); color: white;" onclick="confirmFishAdd()">أضف للسلة</button>
+        </div>
+    </div>
+
+    <!-- نافذة سلة المشتريات والطلب -->
+    <div id="cartModal" class="modal-overlay">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+            <span class="close-modal" onclick="closeModal('cartModal')">&times;</span>
+            <h2 style="margin-bottom: 1.5rem; color: var(--primary-blue);">سلة المشتريات</h2>
+            
+            <div id="cartItemsContainer" style="margin-bottom: 2rem;">
+                <!-- العناصر تضاف هنا بواسطة جافاسكريبت -->
+            </div>
+            
+            <h3 style="margin-bottom: 1rem;">الإجمالي: <span id="cartTotal" style="color: var(--accent-crimson);">0</span> دج</h3>
+
+            <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
+
+            <h3 style="margin-bottom: 1rem; color: var(--primary-blue);">تأكيد الطلبية</h3>
+            <form onsubmit="submitOrder(event)">
+                <div class="form-group">
+                    <label>الاسم واللقب:</label>
+                    <input type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف (إلزامي):</label>
+                    <input type="tel" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>البريد الإلكتروني (اختياري):</label>
+                    <input type="email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>ولاية التوصيل:</label>
+                    <select class="form-control" required>
+                        <option value="">اختر الولاية...</option>
+                        <option value="Alger">الجزائر (450 دج)</option>
+                        <option value="Oran">وهران (800 دج)</option>
+                        <option value="BBA">برج بوعريريج (800 دج)</option>
+                        <!-- يتم إضافة باقي الـ 68 ولاية هنا -->
+                    </select>
+                </div>
+                <button type="submit" class="btn-add" style="background-color: var(--accent-crimson); color: white; border: none;">تأكيد الطلبية النهائي</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- جافاسكريبت للتحكم بالمنطق -->
+    <script>
+        let cart = [];
+        let tempFish = null;
+
+        // إدارة النوافذ المنبثقة
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // إضافة منتج عادي
+        function addToCart(name, price) {
+            cart.push({ id: Date.now(), name: name, price: price });
+            updateCartUI();
+            alert('تمت الإضافة إلى المشتريات بنجاح.');
+        }
+
+        // منطق الأسماك (يتطلب رمز)
+        function openFishModal(name, price) {
+            tempFish = { name: name, price: price };
+            document.getElementById('fishCodeInput').value = '';
+            openModal('fishModal');
+        }
+
+        function confirmFishAdd() {
+            const code = document.getElementById('fishCodeInput').value.trim();
+            if(code === "") {
+                alert("يرجى إدخال رمز السمكة من الإنستغرام.");
+                return;
+            }
+            cart.push({ 
+                id: Date.now(), 
+                name: tempFish.name + " (رمز: " + code + ")", 
+                price: tempFish.price 
+            });
+            updateCartUI();
+            closeModal('fishModal');
+            alert('تم إضافة السمكة للمشتريات.');
+        }
+
+        // حذف من السلة
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartUI();
+        }
+
+        // تحديث واجهة السلة
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            
+            const container = document.getElementById('cartItemsContainer');
+            container.innerHTML = '';
+            
+            let total = 0;
+            
+            if(cart.length === 0) {
+                container.innerHTML = '<p>السلة فارغة حالياً.</p>';
+            } else {
+                cart.forEach(item => {
+                    total += item.price;
+                    container.innerHTML += `
+                        <div class="cart-item">
+                            <div>
+                                <strong>${item.name}</strong><br>
+                                <span style="color: var(--text-gray);">${item.price} دج</span>
+                            </div>
+                            <button class="btn-remove" onclick="removeFromCart(${item.id})">حذف</button>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('cartTotal').innerText = total;
+        }
+
+        function openCart() {
+            updateCartUI();
+            openModal('cartModal');
+        }
+
+        function submitOrder(e) {
+            e.preventDefault();
+            if(cart.length === 0) {
+                alert("لا يمكنك تأكيد الطلبية وسلة المشتريات فارغة.");
+                return;
+            }
+            alert("تم تأكيد طلبيتك بنجاح! سنتواصل معك قريباً.");
+            cart = [];
+            updateCartUI();
+            closeModal('cartModal');
+        }
+    </script>
+</body>
+</html>
